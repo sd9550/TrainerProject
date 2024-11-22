@@ -1,0 +1,16 @@
+
+Trainer Name: Bug Catcher
+Party Size: 3
+(Venonat)(Weedle)(Kakuna)
+Trainer Name: Jr. Trainer♀
+Party Size: 3
+(Spearow)(Sandshrew)(Charmander)
+Trainer Name: Lass
+Party Size: 4
+(Clefairy)(Pidgey)(Wigglytuff)(Pidgeot)
+Trainer Name: Gambler
+Party Size: 1
+(Chansey)
+Trainer Name: Lass
+Party Size: 1
+(Pidgeotto)
