@@ -5,7 +5,8 @@ import java.util.List;
 public class Trainer {
 
     private final String name;
-    private final String[] party;
+    private String[] party;
+    private Creature[] currentParty;
 
 
     public Trainer(String name, String[] party) {
@@ -13,23 +14,40 @@ public class Trainer {
         this.party = party;
     }
 
+    public Trainer(String name, Creature[] creatures) {
+        this.name = name;
+        this.currentParty = creatures;
+    }
+
     public void printTrainerDetails() {
         System.out.println("---------- TRAINER DETAILS ----------");
-        System.out.printf("Trainer Name: %s\nParty Size: %s\n", name, party.length);
-        for (int i = 0; i < party.length; i++) {
-            if (party[i] != null) {
-                System.out.print("\t(" + party[i].split(",")[1] + ")");
+        System.out.printf("Trainer Name: %s\nParty Size: %s\n", name, currentParty.length);
+        for (int i = 0; i < currentParty.length; i++) {
+            if (currentParty[i] != null) {
+                System.out.println(currentParty[i]);
             }
-        System.out.println();
         }
     }
 
     public String getTrainerDetails() {
-        StringBuilder sb = new StringBuilder("\nTrainer Name: %s\nParty Size: %s\n".formatted(name, party.length));
-        for (int i = 0; i < party.length; i++) {
-            sb.append("(").append(party[i].split(",")[1]).append(")");
+        StringBuilder sb = new StringBuilder("\nTrainer Name: %s\nParty Size: %s\n".formatted(name, currentParty.length));
+        for (String s : party) {
+            sb.append("(").append(s.split(",")[1]).append(")");
         }
         return sb.toString();
+    }
+
+    public boolean modifyPartyMember(int index, int level, int effortValue) {
+        if (index >= currentParty.length || effortValue > 65535) {
+            System.out.println("Invalid index or EV detected");
+            return false;
+        } else if (level > 99) {
+            System.out.println("Invalid level detected");
+            return false;
+        }
+
+        currentParty[index].generateStats(level, effortValue);
+        return true;
     }
 
     @Override
@@ -49,12 +67,12 @@ public class Trainer {
 
         Collections.shuffle(trainerValues);
         int randomPartySize = random.nextInt(1, trainerValues.size());
-        String[] tempParty = new String[randomPartySize];
+        Creature[] creatures = new Creature[randomPartySize];
 
         for (int i = 0; i < randomPartySize; i++) {
-            tempParty[i] = pokemonList.get(trainerValues.get(i));
+            creatures[i] = new Creature(pokemonList.get(trainerValues.get(i)));
         }
 
-        return new Trainer(name, tempParty);
+        return new Trainer(name, creatures);
     }
 }

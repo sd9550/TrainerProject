@@ -14,10 +14,19 @@ public class Main {
             return Trainer.getRandomTrainer(trainerList, firstGeneration);
         }).limit(5).toList();
 
-        trainers.forEach(Trainer::printTrainerDetails);
-        assert trainerDataMap != null;
-        printAllData(trainerDataMap);
-        writeToFile(trainers);
+        //trainers.forEach(Trainer::printTrainerDetails);
+       // assert trainerDataMap != null;
+        //printAllData(trainerDataMap);
+        //writeToFile(trainers);
+        assert firstGeneration != null;
+        Creature[] redParty = new Creature[]{new Creature(firstGeneration.get(25)),
+                                new Creature(firstGeneration.get(1)),
+                                new Creature(firstGeneration.get(4)),
+                                new Creature(firstGeneration.get(7))};
+        Trainer redTrainer = new Trainer("Red", redParty);
+        redTrainer.printTrainerDetails();
+        redTrainer.modifyPartyMember(0, 10, 15000);
+
     }
 
     public static List<String> readFileAndReturnPokemonList(String filePath) {
@@ -65,7 +74,7 @@ public class Main {
             } catch (IOException e) {
                 System.out.println("IO Error: " + e.getLocalizedMessage());
             } finally {
-                System.out.println("Total size of list: " + map.size());
+                System.out.println("Total size of map: " + map.size());
             }
         }
         return null;
