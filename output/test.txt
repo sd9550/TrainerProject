@@ -1,0 +1,19 @@
+Gambler,4
+1,Arcanine,0,2,10,14,12,4,1,
+1,Vulpix,0,9,11,10,5,4,6,
+1,Ninetales,0,13,13,15,11,12,6,
+1,Chansey,0,13,5,13,11,7,8,
+Jr. Trainer♀,4
+1,Sandshrew,0,0,4,4,0,8,0,
+1,Rattata,0,1,10,10,7,12,14,
+1,Squirtle,0,1,12,12,1,5,8,
+1,Charmander,0,7,6,3,7,13,13,
+Engineer,1
+1,Electabuzz,0,0,12,2,12,9,14,
+Lass,3
+1,Pidgeot,0,11,5,0,11,1,3,
+1,Wigglytuff,0,9,15,12,15,15,12,
+1,Pidgeotto,0,9,13,6,11,2,2,
+Jr. Trainer♀,2
+1,Rattata,0,15,5,3,3,15,5,
+1,Spearow,0,6,12,11,2,13,1,

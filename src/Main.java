@@ -14,10 +14,7 @@ public class Main {
             return Trainer.getRandomTrainer(trainerList, firstGeneration);
         }).limit(5).toList();
 
-        //trainers.forEach(Trainer::printTrainerDetails);
-       // assert trainerDataMap != null;
-        //printAllData(trainerDataMap);
-        //writeToFile(trainers);
+        writeToFile(trainers);
         assert firstGeneration != null;
         Creature[] redParty = new Creature[]{new Creature(firstGeneration.get(25)),
                                 new Creature(firstGeneration.get(1)),
@@ -26,7 +23,7 @@ public class Main {
         Trainer redTrainer = new Trainer("Red", redParty);
         redTrainer.printTrainerDetails();
         redTrainer.modifyPartyMember(0, 10, 15000);
-
+        writeJsonFormat(redTrainer);
     }
 
     public static List<String> readFileAndReturnPokemonList(String filePath) {
@@ -87,6 +84,11 @@ public class Main {
             try {
                 boolean createdDir = file.getParentFile().mkdir();
                 boolean createdFile = file.createNewFile();
+                if (createdDir && createdFile) {
+                    System.out.println("Successfully created a new directory and file for output data");
+                } else {
+                    System.out.println("Unable to create the requested directory/file for output");
+                }
             } catch (IOException e) {
                 System.out.println("Error: " + e.getLocalizedMessage());
             }
@@ -94,12 +96,20 @@ public class Main {
         }
         try (FileWriter writer = new FileWriter("output/test.txt")) {
             for (Trainer t: trainers) {
-                writer.write(t.getTrainerDetails());
+                writer.write(t.getWriteInfo());
             }
         } catch (IOException e) {
             System.out.println("Error: " + e.getLocalizedMessage());
         }
         System.out.println("Data was successfully written to " + file);
+    }
+
+    public static void writeJsonFormat(Trainer trainer) {
+        try (PrintWriter pw = new PrintWriter("output/json.txt")) {
+            pw.write(trainer.toJSON());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void printAllData(Map<String, List<Integer>> map) {

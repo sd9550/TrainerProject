@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Creature {
 
@@ -11,6 +8,7 @@ public class Creature {
     private Map<String, Integer> creatureStats = new LinkedHashMap<>();
     private final String[] BASE_STATS = {"HP", "ATTACK", "DEFENSE", "SP ATTACK", "SP DEFENSE", "SPEED"};
     private Map<String, Integer> individualValues = new LinkedHashMap<>();
+    private int effortValue = 0;
 
     public Creature(String name, String[] creatureTypes, int[] stats) {
         this.name = name;
@@ -63,6 +61,7 @@ public class Creature {
 
     public void generateStats(int level, int effortValue) {
         this.level = level;
+        this.effortValue = effortValue;
         var copy = Map.copyOf(creatureStats);
 
         for (String s: BASE_STATS) {
@@ -82,6 +81,15 @@ public class Creature {
 
     }
 
+    public String fileWriteInfo() {
+        StringBuilder sb = new StringBuilder("%s,%s,%s,".formatted(level, name, effortValue));
+        for (String s: BASE_STATS) {
+            sb.append(individualValues.get(s)).append(",");
+        }
+        sb.append(System.lineSeparator());
+        return sb.toString();
+    }
+
     public int getLevel() {
         return level;
     }
@@ -89,5 +97,18 @@ public class Creature {
     @Override
     public String toString() {
         return "\nName: %s - %s\nBase Stats: %s".formatted(name, Arrays.toString(creatureTypes), creatureStats.toString());
+    }
+
+    public String toJSON() {
+        return new StringJoiner(", ", "{", "}")
+                .add("\"name\":\"" + name + "\"")
+                .add("\"level\":" + level)
+                .add("\"creatureTypes\":" + "[\"" + creatureTypes[0] + "\",\"" + creatureTypes[1] + "\"]")
+                .add("\"effortValue\":" + effortValue)
+                .add("\"individual values\":" + "[%s,%s,%s,%s,%s,%s]".formatted(individualValues.get("HP"), individualValues.get("ATTACK"),
+                        individualValues.get("DEFENSE"), individualValues.get("SP ATTACK"), individualValues.get("SP DEFENSE"), individualValues.get("SPEED")))
+                .add("\"stats\":" + "[%s,%s,%s,%s,%s,%s]".formatted(creatureStats.get("HP"), creatureStats.get("ATTACK"),
+                        creatureStats.get("DEFENSE"), creatureStats.get("SP ATTACK"), creatureStats.get("SP DEFENSE"), creatureStats.get("SPEED")))
+                .toString();
     }
 }

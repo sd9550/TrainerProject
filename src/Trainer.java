@@ -7,6 +7,7 @@ public class Trainer {
     private final String name;
     private String[] party;
     private Creature[] currentParty;
+    private int dollars = 0;
 
 
     public Trainer(String name, String[] party) {
@@ -15,8 +16,10 @@ public class Trainer {
     }
 
     public Trainer(String name, Creature[] creatures) {
+        Random random = new Random();
         this.name = name;
         this.currentParty = creatures;
+        this.dollars = random.nextInt(50, 500);
     }
 
     public void printTrainerDetails() {
@@ -37,17 +40,24 @@ public class Trainer {
         return sb.toString();
     }
 
-    public boolean modifyPartyMember(int index, int level, int effortValue) {
-        if (index >= currentParty.length || effortValue > 65535) {
-            System.out.println("Invalid index or EV detected");
-            return false;
-        } else if (level > 99) {
-            System.out.println("Invalid level detected");
-            return false;
+    public String getWriteInfo() {
+        StringBuilder sb = new StringBuilder(name + "," + currentParty.length + System.lineSeparator());
+        for (Creature c: currentParty) {
+            sb.append(c.fileWriteInfo());
         }
+        return sb.toString();
+     }
 
+     // modify the party based on index with a new level and effort value
+    public void modifyPartyMember(int index, int level, int effortValue) {
+        if (index < 0 || index >= currentParty.length) {
+            System.out.println("Invalid index detected - current party size is " + currentParty.length);
+        } else if (effortValue > 65535 || effortValue <= 0){
+            System.out.println("Invalid effort value detected - value must be greater than 0 and less than 65535");
+        } else if (level <= currentParty[index].getLevel() || level > 99) {
+            System.out.println("Invalid level detected - level must be greater than current value and less than 100");
+        }
         currentParty[index].generateStats(level, effortValue);
-        return true;
     }
 
     @Override
@@ -55,6 +65,7 @@ public class Trainer {
         return "Trainer Name: %s\nParty Size: %s\n".formatted(name, party.length);
     }
 
+    // generate a random trainer based on trainer-data.csv. File has data for name and valid first-gen.csv values
     public static Trainer getRandomTrainer(List<String> trainerList, List<String> pokemonList) {
         Random random = new Random();
         String[] randomLine = trainerList.get(random.nextInt(0, trainerList.size())).split(",");
@@ -74,5 +85,21 @@ public class Trainer {
         }
 
         return new Trainer(name, creatures);
+    }
+
+    public String toJSON() {
+        StringJoiner sj = new StringJoiner(",", "[", "]");
+
+        for (Creature c: currentParty) {
+            sj.add(c.toJSON());
+        }
+
+        return new StringJoiner(", ", "{", "}")
+                .add("\"name\":\"" + name + "\"")
+                .add("\"dollars\":" + dollars)
+                .add("\"party size\":" + currentParty.length)
+                //.add("\"party\":[" + partyDetails + "]")
+                .add("\"party\":" + sj)
+                .toString();
     }
 }
